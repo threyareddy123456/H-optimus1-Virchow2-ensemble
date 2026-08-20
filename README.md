@@ -56,7 +56,11 @@ reproduced.
 
 ```bash
 pip install -r requirements.txt
-export HF_TOKEN=...            # H-optimus-1 and Virchow2 are gated on the Hub
+export HF_TOKEN=...              # H-optimus-1 and Virchow2 are gated on the Hub
+export SYNAPSE_AUTH_TOKEN=...    # challenge data access
+
+# 0. data (40 training shards + validation shard + metadata)
+python src/00_download_data.py
 
 # 1. features (data/{train,val}/*.tar, WebDataset shards)
 python src/01_extract_features.py --backbone hoptimus --split train
@@ -76,6 +80,9 @@ python src/03_calibrate.py
 # 4. predictions
 python src/04_predict.py                                # ensemble, 0.55/0.45
 python src/04_predict.py --single hoptimus --calibrate   # standalone, calibrated
+
+# 5. development analyses (per-class, ablation, complementarity, weight sweep)
+python src/05_analysis.py
 ```
 
 Expected layout under `--root`:
@@ -94,6 +101,25 @@ brats2026/
 `SubjectID,Prediction` — `SubjectID` carries **no** file extension;
 `Prediction` is an integer in `[0, 9]` following the challenge class order:
 `CT, DM, IC, LI, MP, NC, PL, PN, WM, NOTA`.
+
+## Development analyses
+
+`05_analysis.py` retrains both heads on the patient-disjoint training portion
+under three seeds and writes, to `<root>/analysis/`:
+
+| File | Contents |
+|---|---|
+| `table_ablation.csv` | six configurations, mean ± std over seeds |
+| `per_class_f1.csv` | per-class F1 for both heads and the ensemble |
+| `complementarity.txt` | agreement, McNemar test, oracle accuracy |
+| `weight_sweep.csv` | macro-F1 against fusion weight, mean and std |
+| `cm_*.csv` | row-normalised confusion matrices |
+
+Trained probability matrices are cached, so re-runs skip training.
+
+## Licence
+
+MIT — see `LICENSE`.
 
 ## Notes
 
