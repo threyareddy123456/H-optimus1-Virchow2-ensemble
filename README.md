@@ -96,6 +96,19 @@ brats2026/
 └── results/             written by stage 4
 ```
 
+## Pre-trained heads
+
+The two trained classifier heads are included under `checkpoints/`, so
+inference can be reproduced without retraining:
+
+```bash
+mkdir -p brats2026/models && cp checkpoints/*.pt brats2026/models/
+python src/04_predict.py
+```
+
+Cached validation embeddings from stage 1 are still required — the frozen
+encoders themselves come from the Hugging Face Hub.
+
 ## Output format
 
 `SubjectID,Prediction` — `SubjectID` carries **no** file extension;
