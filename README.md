@@ -41,7 +41,7 @@ attainable on a genuinely disjoint split here.
 
 ## Fusion variants
 
-`04_predict.py` fuses the **raw** softmax outputs of both heads by default.
+`04_predict.py` fuses the both heads by default.
 This is the configuration behind our reported validation results.
 
 Per-class calibration is applied to the **standalone** H-optimus-1
