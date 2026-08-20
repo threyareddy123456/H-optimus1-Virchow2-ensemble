@@ -45,7 +45,7 @@ attainable on a genuinely disjoint split here.
 This is the configuration behind our reported validation results.
 
 Per-class calibration is applied to the **standalone** H-optimus-1
-configuration (`--single hoptimus --calibrate`), not inside the ensemble.
+configuration (`--single hoptimus --calibrate`)
 
 `--calibrate-fusion` calibrates the H-optimus-1 branch before fusing. This is
 what the submitted inference container does. The two fusion variants differ on
